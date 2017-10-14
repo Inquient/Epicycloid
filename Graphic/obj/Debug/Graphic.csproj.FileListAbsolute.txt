@@ -1,0 +1,10 @@
+C:\Users\inquient\source\repos\Graphic\Graphic\bin\Debug\Graphic.exe.config
+C:\Users\inquient\source\repos\Graphic\Graphic\bin\Debug\Graphic.exe
+C:\Users\inquient\source\repos\Graphic\Graphic\bin\Debug\Graphic.pdb
+C:\Users\inquient\source\repos\Graphic\Graphic\obj\Debug\Graphic.csprojResolveAssemblyReference.cache
+C:\Users\inquient\source\repos\Graphic\Graphic\obj\Debug\Graphic.Form1.resources
+C:\Users\inquient\source\repos\Graphic\Graphic\obj\Debug\Graphic.Properties.Resources.resources
+C:\Users\inquient\source\repos\Graphic\Graphic\obj\Debug\Graphic.csproj.GenerateResource.Cache
+C:\Users\inquient\source\repos\Graphic\Graphic\obj\Debug\Graphic.csproj.CoreCompileInputs.cache
+C:\Users\inquient\source\repos\Graphic\Graphic\obj\Debug\Graphic.exe
+C:\Users\inquient\source\repos\Graphic\Graphic\obj\Debug\Graphic.pdb
