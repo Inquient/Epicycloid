@@ -28,9 +28,13 @@ namespace Graphic
         public Form1()
         {
             InitializeComponent();
-            trackBar1.TickFrequency = 10;
+            
             trackBar1.Minimum = 1;
             trackBar1.Maximum = 100;
+            trackBar1.TickFrequency = 10;
+            trackBar1.LargeChange = 10;
+            trackBar1.SmallChange = 10;
+            trackBar1.Value = 10;
         }
 
         private PointF[] getEpiCycle(double R, double r, double arm)
@@ -97,7 +101,7 @@ namespace Graphic
             double min;
             if (R < r) min = R;
             else min = r;
-            if (arm < min) min = arm;
+            if ((arm < min) && (arm !=0 )) min = arm;
 
             int order = 1;
             while (min > 10)
@@ -106,9 +110,9 @@ namespace Graphic
                 order++;
             }
 
-            R = (R/Math.Pow(10, order)) * scale;
-            r = (r/Math.Pow(10, order)) * scale;
-            arm = (arm/Math.Pow(10, order)) * scale;
+            R = (R/Math.Pow(10, order));
+            r = (r/Math.Pow(10, order));
+            arm = (arm/Math.Pow(10, order));
 
             //return Convert.ToString(R) + " " + Convert.ToString(r) + " " + Convert.ToString(arm);
         }
@@ -132,11 +136,11 @@ namespace Graphic
             values = new displayedValues(R, r, arm);
 
             reduceScale();
-            
-            epicycle = getEpiCycle(this.R, this.r, this.arm);
-            circle1 = getCircle(this.R, 0);
-            circle2 = getCircle(this.r, this.R + this.r);
-            traectory = getCircle(this.R + this.r, 0);
+
+            epicycle = getEpiCycle(R * scale, r * scale, arm * scale);
+            circle1 = getCircle(R * scale, 0);
+            circle2 = getCircle(r * scale, R * scale + r * scale);
+            traectory = getCircle(R * scale + r * scale, 0);
 
             //MessageBox.Show(Convert.ToString(reduceScale()));
 
@@ -146,7 +150,8 @@ namespace Graphic
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-            "R - радиус стационарной окружности\n r - радиус катящейся окружности\n x - расстояние до точки Х",
+            "R - радиус стационарной окружности\n r - радиус катящейся окружности\n x - расстояние до точки Х\n" +
+            "Исполизуйте кнопку масштаб если хотите увеличить график\n более чем в 10 раз",
             "Инструкция",
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
@@ -161,26 +166,30 @@ namespace Graphic
             Pen penTraectory = new Pen(Color.Yellow, 1);
             Pen penEpicycle = new Pen(Color.DeepSkyBlue, 1);
 
-            grafen.DrawLine(pendefault, new Point(0, pictureBox1.Height / 2), new Point(pictureBox1.Height, pictureBox1.Height / 2));
-            grafen.DrawLine(pendefault, new Point(pictureBox1.Width / 2, 0), new Point(pictureBox1.Width / 2, pictureBox1.Width));
+            grafen.DrawLine(pendefault, new Point(0, pictureBox1.Height / 2), new Point(pictureBox1.Width, pictureBox1.Height / 2));
+            grafen.DrawLine(pendefault, new Point(pictureBox1.Width / 2, 0), new Point(pictureBox1.Width / 2, pictureBox1.Height));
 
             try
             {
+                //grafen.DrawCurve(penCrcle, circle1);
+                //grafen.DrawCurve(penCrcle, circle2);
+                //grafen.DrawCurve(penTraectory, traectory);
+                //grafen.DrawCurve(penEpicycle, epicycle);
                 for (int i = 0; i < circle1.Length; i++)
                 {
-                    grafen.DrawRectangle(penCrcle, (float)(circle1[i].X + pictureBox1.Height / 2), (float)(-1 * (circle1[i].Y - pictureBox1.Width / 2)), 1, 1);
-                    grafen.DrawRectangle(penCrcle, (float)(circle2[i].X + pictureBox1.Height / 2), (float)(-1 * (circle2[i].Y - pictureBox1.Width / 2)), 1, 1);
-                    grafen.DrawRectangle(penTraectory, (float)(traectory[i].X + pictureBox1.Height / 2), (float)(-1 * (traectory[i].Y - pictureBox1.Width / 2)), 1, 1);
+                    grafen.DrawRectangle(penCrcle, (float)(circle1[i].X + (pictureBox1.Width / 2)), (float)(-1 * (circle1[i].Y - (pictureBox1.Height / 2))), 1, 1);
+                    grafen.DrawRectangle(penCrcle, (float)(circle2[i].X + (pictureBox1.Width / 2)), (float)(-1 * (circle2[i].Y - (pictureBox1.Height / 2))), 1, 1);
+                    grafen.DrawRectangle(penTraectory, (float)(traectory[i].X + pictureBox1.Width / 2), (float)(-1 * (traectory[i].Y - pictureBox1.Height / 2)), 1, 1);
                 }
                 for (int i = 0; i < epicycle.Length; i++)
                 {
-                    grafen.DrawRectangle(penEpicycle, (float)(epicycle[i].X + pictureBox1.Height / 2), (float)(-1 * (epicycle[i].Y - pictureBox1.Width / 2)), 1, 1);
+                    grafen.DrawRectangle(penEpicycle, (float)(epicycle[i].X + pictureBox1.Width / 2), (float)(-1 * (epicycle[i].Y - pictureBox1.Height / 2)), 1, 1);
 
                 }
                 grafen.DrawString(values.radiusR, new Font(FontFamily.GenericSansSerif, 10, FontStyle.Regular),
-                    new SolidBrush(Color.Black), (float)this.R + (pictureBox1.Height / 2), pictureBox1.Width / 2);
+                    new SolidBrush(Color.Black), scale * (float)this.R + (pictureBox1.Width / 2), pictureBox1.Height / 2);
                 grafen.DrawString(values.radiusr, new Font(FontFamily.GenericSansSerif, 10, FontStyle.Regular),
-                    new SolidBrush(Color.Black), (float)this.R + 2*(float)this.r + pictureBox1.Height / 2, (pictureBox1.Width / 2)-10);
+                    new SolidBrush(Color.Black), scale * ((float)this.R + 2*(float)this.r) + pictureBox1.Width / 2, (pictureBox1.Height / 2)-10);
             }
             catch
             {
@@ -205,12 +214,25 @@ namespace Graphic
             scale = trackBar1.Value;
             label4.Text = "Масштаб - " + Convert.ToString(scale);
 
-            reduceScale();
-            epicycle = getEpiCycle(this.R, this.r, this.arm);
-            circle1 = getCircle(this.R, 0);
-            circle2 = getCircle(this.r, this.R + this.r);
-            traectory = getCircle(this.R + this.r, 0);
+            //reduceScale();
+
+            epicycle = getEpiCycle(R*scale, r * scale, arm * scale);
+            circle1 = getCircle(R * scale, 0);
+            circle2 = getCircle(r * scale, R * scale + r * scale);
+            traectory = getCircle(R * scale + r * scale, 0);
             pictureBox1.Refresh();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                trackBar1.Maximum = Convert.ToInt32(textBox4.Text);
+            }
+            catch
+            {
+                MessageBox.Show("Неверный формат ввода!");
+            }
         }
     }
 }
